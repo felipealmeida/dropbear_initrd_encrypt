@@ -64,7 +64,7 @@ run_hook ()
                     ;;
                 loop)
                     echo "Using loop with start at $loop_offset and size $loop_size"
-                    losetup -o $loop_offset --sizelimit $loop_size /dev/loop0 $cryptdev
+                    echo "$loop_offset:$loop_size:/dev/loop0:$cryptdev" > /.cryptloop
                     cryptdev=/dev/loop0
                     ;;
                 *)
