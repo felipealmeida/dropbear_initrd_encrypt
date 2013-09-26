@@ -74,10 +74,10 @@ build ()
 
   cat <<SCRIPTEOF > ${TMPDIR}/cryptsetup_shell
 #!/bin/sh
-if [ -c "/.cryptloop" ]; then
-  modprobe loop
-  losetup -o \`cat /.cryptloop | cut -d: -f1\` --sizelimit \`cat /.cryptloop | cut -d: -f2\` \`cat /.cryptloop | cut -d: -f3\` \`cat /.cryptloop | cut -d: -f4\` 
-fi
+#if [ -f "/.cryptloop" ]; then
+#  modprobe loop
+#  losetup -o \`cat /.cryptloop | cut -d: -f1\` --sizelimit \`cat /.cryptloop | cut -d: -f2\` \`cat /.cryptloop | cut -d: -f3\` \`cat /.cryptloop | cut -d: -f4\` 
+#fi
 if [ -c "/dev/mapper/control" ]; then
   if eval /sbin/cryptsetup luksOpen \`cat /.cryptdev\` \`cat /.cryptname\` \`cat /.cryptargs\` ; then
     echo > /.done

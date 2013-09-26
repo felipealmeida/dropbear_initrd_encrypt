@@ -41,8 +41,8 @@ run_hook ()
             cryptdev="$(echo "${cryptdevice}" | cut -d: -f1)"
             cryptname="$(echo "${cryptdevice}" | cut -d: -f2)"
             cryptoptions="$(echo "${cryptdevice}" | cut -d: -f3)"
-            loop_offset="$(echo "${cryptdevice}" | cut -d: -f3)"
-            loop_size="$(echo "${cryptdevice}" | cut -d: -f3)"
+            loop_offset="$(echo "${cryptdevice}" | cut -d: -f4)"
+            loop_size="$(echo "${cryptdevice}" | cut -d: -f5)"
         else
             DEPRECATED_CRYPT=1
             cryptdev="${root}"
@@ -65,6 +65,8 @@ run_hook ()
                 loop)
                     echo "Using loop with start at $loop_offset and size $loop_size"
                     echo "$loop_offset:$loop_size:/dev/loop0:$cryptdev" > /.cryptloop
+                    /sbin/modprobe loop
+                    /sbin/losetup -o $loop_offset --sizelimit $loop_size /dev/loop0 $cryptdev
                     cryptdev=/dev/loop0
                     ;;
                 *)
