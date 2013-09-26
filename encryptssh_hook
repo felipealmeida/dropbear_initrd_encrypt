@@ -41,6 +41,8 @@ run_hook ()
             cryptdev="$(echo "${cryptdevice}" | cut -d: -f1)"
             cryptname="$(echo "${cryptdevice}" | cut -d: -f2)"
             cryptoptions="$(echo "${cryptdevice}" | cut -d: -f3)"
+            loop_offset="$(echo "${cryptdevice}" | cut -d: -f3)"
+            loop_size="$(echo "${cryptdevice}" | cut -d: -f3)"
         else
             DEPRECATED_CRYPT=1
             cryptdev="${root}"
@@ -59,6 +61,11 @@ run_hook ()
                 allow-discards)
                     echo "Enabling TRIM/discard support."
                     cryptargs="${cryptargs} --allow-discards"
+                    ;;
+                loop)
+                    echo "Using loop with start at $loop_offset and size $loop_size"
+                    losetup -o $loop_offset --sizelimit $loop_size /dev/loop0 $cryptdev
+                    cryptdev=/dev/loop0
                     ;;
                 *)
                     echo "Encryption option '${cryptopt}' not known, ignoring." >&2
